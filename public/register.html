@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creatives' Hub - Register</title>
+  
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./main.css">
+</head>
+<body class="light-mode"> <!-- 🔹 Default is light mode -->
+
+  <!-- 🔹 Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle">🌙</button>
+
+  <!-- 🔹 Headings above the card -->
+  <div class="page-heading">
+    <h1>Creatives' Hub</h1>
+    <h2>Readers' Notes</h2>
+  </div>
+
+  <div class="login-card">
+    <form>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Enter your First name" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Enter your Last name" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Enter your username" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Enter your email" required>
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn btn-custom w-100 mb-3">Register</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- 🔹 Theme Toggle Script -->
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      body.classList.toggle('light-mode');
+      toggleBtn.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+  </script>
+</body>
+</html>
