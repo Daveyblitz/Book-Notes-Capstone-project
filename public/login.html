@@ -30,19 +30,19 @@
   </div>
 
   <div class="login-card">
-    <form>
+    <form action="/login" method = "POST">
       <div class="mb-3">
-        <input type="text" class="form-control" placeholder="Enter your username" required>
+        <input type="text" class="form-control" placeholder="Enter your username" name="username" required>
       </div>
       <div class="mb-3">
-        <input type="password" class="form-control" placeholder="Enter your password" required>
+        <input type="password" class="form-control" placeholder="Enter your password" name="password" required>
       </div>
       <button type="submit" class="btn btn-custom w-100 mb-3">Login</button>
     </form>
 
     <p class="text-center text-muted mb-2">Are you new here?</p>
     <div class="d-flex justify-content-center">
-      <a href="#" class="btn btn-outline-custom">Register</a>
+      <a href="./register.html" class="btn btn-outline-custom">Register</a>
     </div>
   </div>
 
