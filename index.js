@@ -1,10 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import passport from "passport";
 import session from "express-session";
 import bcrypt from "bcryptjs";
-import ejs from "ejs";
 import env from "dotenv";
+import axios from "axios";
 
 const app = express();
 const port = 3000;
@@ -85,8 +86,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
 //home page route
 app.get("/", async (req, res) => {
   if (req.session.userEmail) {
@@ -95,6 +94,58 @@ app.get("/", async (req, res) => {
   } else {
     res.redirect("/login");
   }
+});
+
+//add book review route
+app.get("/add", (req, res) => {
+  if (req.session.userEmail) {
+    res.render("add");
+  }
+  else {
+    res.redirect("/login");
+  }
+});
+
+
+// API route for Open Library book search (using Axios)
+app.get('/api/search-books', async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json([]);
+  try {
+    const response = await axios.get(`https://openlibrary.org/search.json?title=${encodeURIComponent(q)}&limit=10`);
+    const data = response.data;
+    const books = data.docs.map(b => ({
+      title: b.title,
+      author_name: b.author_name ? b.author_name[0] : '',
+      cover_id: b.cover_i || ''
+    }));
+    res.json(books);
+  } catch (err) {
+    res.status(500).json([]);
+  }
+});
+
+// Add book review POST route
+app.post('/add', async (req, res) => {
+  const { title, author, cover_id, review, rating } = req.body;
+  const userEmail = req.session.userEmail;
+  try {
+    await db.query(
+      'INSERT INTO book_reviews (user_email, title, author, cover_id, review, rating, review_date) VALUES ($1, $2, $3, $4, $5, $6, NOW())',
+      [userEmail, title, author, cover_id, review, rating]
+    );
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/add');
+  }
+});
+
+//logout button on home page
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 });
 
 app.listen(port, () => {

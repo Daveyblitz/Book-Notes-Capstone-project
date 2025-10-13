@@ -30,6 +30,10 @@
     color: white;
    }
 
+    body.dark-mode button.btn.btn-outline.btn-sm {
+      color: white;
+      border-color: none;
+    }
 
   </style>
   
@@ -43,9 +47,10 @@
   <!-- Navbar -->
   <nav class="navbar px-3 w-100">
     <a class="navbar-brand" href="#">Book Notes</a>
+    <input type="text" class="form-control w-50" placeholder="Search a user">
     <div class="ms-auto">
-      <a href="/" class="btn btn-outline btn-sm me-2">Home</a>
-      <a href="/logout" class="btn btn-outline btn-sm">Logout</a>
+      <a href="./index.ejs" class="btn btn-outline btn-sm me-2">Home</a> 
+          <a class="btn btn-outline btn-sm" href="/logout">Logout</a>
       <button class="" id="themeToggle">🌙</button>
     </div>
   </nav>
@@ -59,7 +64,7 @@
           <div class="row g-0">
             <div class="col-md-3">
               <% if (review.cover_id) { %>
-                <img src="https://covers.openlibrary.org/b/id/<%=review.cover_idz%>-M.jpg" alt="Book cover" class="img-fluid placeholder-img">
+                <img src="https://covers.openlibrary.org/b/id/<%=review.cover_id%>-M.jpg" alt="Book cover" class="img-fluid placeholder-img">
               <% } else { %>
                 <img src="https://via.placeholder.com/200x250.png?text=No+Cover" alt="Placeholder cover" class="img-fluid placeholder-img">
               <% } %>
@@ -69,7 +74,7 @@
                 <h5 class="card-title"><%= review.title || "Untitled" %></h5>
                 <h6 class="card-subtitle mb-2">By <%= review.author || "Unknown" %></h6>
                 <p class="card-text"><%= review.review %></p>
-                <p class="rating">Rating: <%= review.rating %> / 5</p>
+                <p class="rating">Rating: <%= review.rating %> / 10</p>
                 <div class="d-flex gap-2">
                   <a href="/books/<%= review.id %>/edit" class="btn btn-outline-light btn-sm">Edit</a>
                   <a href="/books/<%= review.id %>/delete" class="btn btn-outline-light btn-sm">Delete</a>
@@ -80,10 +85,13 @@
         </div>
       <% }); %>
     <% } else { %>
-      <div class="alert alert-info">
+      <div class="alert-info alert">
         Welcome, <%= name %>! Add your book notes to get started.
       </div>
     <% } %>
+    <form action="/add" method="GET">
+      <button type="submit" class="btn btn-custom">Add Book Review +</button>
+    </form>
   </div>
 
   <!-- Theme Toggle Script -->
@@ -96,6 +104,7 @@
       body.classList.toggle('light-mode');
       toggleBtn.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
     });
+
   </script>
 </body>
 </html>

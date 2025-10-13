@@ -1,4 +1,4 @@
-body.login {
+body.login, body.add {
       font-family: 'Merriweather', serif;
       min-height: 100vh;
       display: flex;
