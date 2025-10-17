@@ -49,23 +49,26 @@ app.post('/login', async (req, res) => {
 
 async function checkReviews(req) {
   const result = await db.query(
-    "SELECT review_id, review, review_date, rating, cover_id FROM book_reviews JOIN users ON users.email = user_email WHERE user_email = $1;",
+    `SELECT br.review_id, br.review, br.review_date, br.rating, br.cover_id, b.title, b.author
+     FROM book_reviews br
+     JOIN users u ON u.email = br.user_email
+     JOIN books b ON br.cover_id = b.cover_id
+     WHERE br.user_email = $1;`,
     [req.session.userEmail]
   );
   let reviews = [];
   result.rows.forEach((review) => {
     reviews.push(review);
-  });
-  console.log(reviews);
+  }); 
+  console.log(reviews) ;
   return reviews;
 }
-
 
 //register route
 app.get("/register", (req, res) => {
   res.redirect("/register.html");
 });
-
+ 
 app.post('/register', async (req, res) => {
   const { first_name, last_name, email, username, password } = req.body;
   try {
@@ -93,7 +96,7 @@ app.get("/", async (req, res) => {
     res.render("index", { name: req.session.username, book_reviews: reviews });
   } else {
     res.redirect("/login");
-  }
+  } 
 });
 
 //add book review route
@@ -130,11 +133,24 @@ app.post('/add', async (req, res) => {
   const { title, author, cover_id, review, rating } = req.body;
   const userEmail = req.session.userEmail;
   try {
-    await db.query(
-      'INSERT INTO book_reviews (user_email, title, author, cover_id, review, rating, review_date) VALUES ($1, $2, $3, $4, $5, $6, NOW())',
-      [userEmail, title, author, cover_id, review, rating]
+       const bookExists = await db.query(
+      'SELECT * FROM  books WHERE cover_id = ($1)',
+      [cover_id]
     );
+     if (bookExists.rows.length === 0) {
+      await db.query(
+        'INSERT INTO books (cover_id, author, title) VALUES ($1, $2, $3)', [cover_id, author, title]
+      );
+     }
+    await db.query(
+      'INSERT INTO book_reviews ( review, review_date, rating, user_email, cover_id) VALUES ($1, $2, $3, $4, $5)',
+      [review, new Date(), rating, userEmail, cover_id]
+    );
+
+    
+
     res.redirect('/');
+
   } catch (err) {
     console.error(err);
     res.redirect('/add');
