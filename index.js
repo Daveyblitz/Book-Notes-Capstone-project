@@ -157,6 +157,40 @@ app.post('/add', async (req, res) => {
   }
 });
 
+//edit book review route
+app.post("/edit", async (req, res) => {
+  const { updatedReviewId, updatedReview, updatedRating } = req.body;
+  const userEmail = req.session.userEmail;
+  
+  try {
+    await db.query(
+      'UPDATE book_reviews SET review = $1, rating = $2 WHERE review_id = $3 AND user_email = $4',
+      [updatedReview, updatedRating, updatedReviewId, userEmail]
+    );
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
+
+//delete book review route
+app.post("/delete", async (req, res) => {
+  const { deleteReviewId } = req.body;
+  const userEmail = req.session.userEmail;
+  
+  try {
+    await db.query(
+      'DELETE FROM book_reviews WHERE review_id = $1 AND user_email = $2',
+      [deleteReviewId, userEmail]
+    );
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
+
 //logout button on home page
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {

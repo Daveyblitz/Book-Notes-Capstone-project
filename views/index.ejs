@@ -73,11 +73,33 @@
               <div class="card-body">
                 <h5 class="card-title"><%= review.title || "Untitled" %></h5>
                 <h6 class="card-subtitle mb-2">By <%= review.author || "Unknown" %></h6>
-                <p class="card-text"><%= review.review %></p>
-                <p class="rating">Rating: <%= review.rating %> / 10</p>
+                
+                <!-- Review text (view mode) -->
+                <p class="card-text" id="reviewText<%= review.review_id %>"><%= review.review %></p>
+                
+                <!-- Review edit form (hidden by default) -->
+                <form action="/edit" method="POST" class="edit-form" id="editForm<%= review.review_id %>" style="display: none;">
+                  <input type="hidden" name="updatedReviewId" value="<%= review.review_id %>">
+                  <div class="mb-2">
+                    <textarea class="form-control" name="updatedReview" rows="3"><%= review.review %></textarea>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Rating:</label>
+                    <input type="number" class="form-control" name="updatedRating" value="<%= review.rating %>" min="1" max="10" required>
+                  </div>
+                  <button type="submit" class="btn btn-success btn-sm">Save</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit('<%= review.review_id %>')">Cancel</button>
+                </form>
+                
+                <!-- Rating (view mode) -->
+                <p class="rating" id="ratingText<%= review.review_id %>">Rating: <%= review.rating %> / 10</p>
+                
                 <div class="d-flex gap-2">
-                  <a href="/books/<%= review.id %>/edit" class="btn btn-outline-light btn-sm">Edit</a>
-                  <a href="/books/<%= review.id %>/delete" class="btn btn-outline-light btn-sm">Delete</a>
+                  <button class="btn btn-outline-primary btn-sm" id="editBtn<%= review.review_id %>" onclick="showEditForm('<%= review.review_id %>')">Edit</button>
+                  <form action="/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this review?');">
+                    <input type="hidden" name="deleteReviewId" value="<%= review.review_id %>">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -104,6 +126,27 @@
       body.classList.toggle('light-mode');
       toggleBtn.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
     });
+
+    // Edit and Delete functionality
+    function showEditForm(reviewId) {
+      // Hide the view mode elements
+      document.getElementById('reviewText' + reviewId).style.display = 'none';
+      document.getElementById('ratingText' + reviewId).style.display = 'none';
+      document.getElementById('editBtn' + reviewId).style.display = 'none';
+      
+      // Show the edit form
+      document.getElementById('editForm' + reviewId).style.display = 'block';
+    }
+
+    function cancelEdit(reviewId) {
+      // Show the view mode elements
+      document.getElementById('reviewText' + reviewId).style.display = 'block';
+      document.getElementById('ratingText' + reviewId).style.display = 'block';
+      document.getElementById('editBtn' + reviewId).style.display = 'inline-block';
+      
+      // Hide the edit form
+      document.getElementById('editForm' + reviewId).style.display = 'none';
+    }
 
   </script>
 </body>

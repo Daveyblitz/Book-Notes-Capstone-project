@@ -92,6 +92,52 @@ body.login, body.add {
       color: #fff;
     }
 
+    /* Dark mode card styling */
+    body.dark-mode .card {
+      background-color: #2b2b2b;
+      border-color: #444;
+      color: #f5f5f5;
+    }
+
+    body.dark-mode .card-title {
+      color: #f5f5f5;
+    }
+
+    body.dark-mode .card-subtitle {
+      color: #bbb !important;
+    }
+
+    body.dark-mode .card-text {
+      color: #ddd;
+    }
+
+    body.dark-mode .rating {
+      color: #ddd;
+    }
+
+    /* Light mode card styling */
+    body.light-mode .card {
+      background-color: #fff;
+      border-color: #dee2e6;
+      color: #222;
+    }
+
+    body.light-mode .card-title {
+      color: #222;
+    }
+
+    body.light-mode .card-subtitle {
+      color: #6c757d !important;
+    }
+
+    body.light-mode .card-text {
+      color: #333;
+    }
+
+    body.light-mode .rating {
+      color: #555;
+    }
+
     /* 🔹 Shared Styles */
     .page-heading {
       text-align: center;
